@@ -118,4 +118,6 @@ interface IStatusBarService
 
     void toggleOrientationListener(boolean enable);
     void setAutoRotate(boolean enabled);
+    
+    void handleInDisplayFingerprintView(boolean show, boolean isEnrolling);
 }
