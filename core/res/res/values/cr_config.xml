@@ -49,4 +49,10 @@
 
     <!-- Whether to allow sending active app broadcast -->
     <bool name="config_allowActivePackageBroadcast">false</bool>
+
+    <!-- Show a custom view for FOD -->
+    <bool name="config_needCustomFODView">false</bool>
+
+    <!-- Whether to use OnePlus specific FOD -->
+    <bool name="config_usesOnePlusFOD">false</bool>
 </resources>
