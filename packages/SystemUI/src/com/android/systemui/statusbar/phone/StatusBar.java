@@ -5543,6 +5543,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                         setPulsing(true);
                     }
                     setOnPulseEvent(reason, true);
+                    KeyguardUpdateMonitor.getInstance(mContext).setPulsing(true);
                 }
 
                 @Override
@@ -5550,6 +5551,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                     callback.onPulseFinished();
                     setPulsing(false);
                     setOnPulseEvent(-1, false);
+                    KeyguardUpdateMonitor.getInstance(mContext).setPulsing(false);
                 }
 
                 private void setPulsing(boolean pulsing) {
