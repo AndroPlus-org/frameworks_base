@@ -41,6 +41,8 @@ public abstract class EnrollClient extends ClientMonitor {
     private static final int ENROLLMENT_TIMEOUT_MS = 60 * 1000; // 1 minute
     private byte[] mCryptoToken;
     private boolean mDisplayFODView;
+    private boolean mUsesOnePlusFOD;
+    private final FacolaView mFacola;
     private IStatusBarService mStatusBarService;
     private IVendorFingerprintExtensions mExtDaemon = null;
     private static final int DISABLE_FP_LONGPRESS = 4;
@@ -53,6 +55,7 @@ public abstract class EnrollClient extends ClientMonitor {
         super(context, halDeviceId, token, receiver, userId, groupId, restricted, owner);
         mCryptoToken = Arrays.copyOf(cryptoToken, cryptoToken.length);
         mDisplayFODView = context.getResources().getBoolean(com.android.internal.R.bool.config_needCustomFODView);
+        mUsesOnePlusFOD = context.getResources().getBoolean(com.android.internal.R.bool.config_usesOnePlusFOD);
         mStatusBarService = statusBarService;
     }
 
@@ -81,7 +84,7 @@ public abstract class EnrollClient extends ClientMonitor {
         MetricsLogger.action(getContext(), MetricsEvent.ACTION_FINGERPRINT_ENROLL);
         try {
             receiver.onEnrollResult(getHalDeviceId(), fpId, groupId, remaining);
-            if(remaining == 0 && mDisplayFODView) {
+            if(remaining == 0 && mDisplayFODView && mUsesOnePlusFOD) {
                 try {
                     mExtDaemon = IVendorFingerprintExtensions.getService();
                     mExtDaemon.updateStatus(FINISH_FP_ENROLL);
@@ -104,7 +107,7 @@ public abstract class EnrollClient extends ClientMonitor {
         }
         Slog.w(TAG, "Starting enroll");
 
-        if (mDisplayFODView) {
+        if (mDisplayFODView && mUsesOnePlusFOD) {
             try {
                 mExtDaemon = IVendorFingerprintExtensions.getService();
                 mExtDaemon.updateStatus(RESUME_FP_ENROLL);
@@ -135,7 +138,7 @@ public abstract class EnrollClient extends ClientMonitor {
             return 0;
         }
 
-        if (mDisplayFODView) {
+        if (mDisplayFODView && mUsesOnePlusFOD) {
             try {
                 mStatusBarService.handleInDisplayFingerprintView(false, true);
             } catch (RemoteException e) {}

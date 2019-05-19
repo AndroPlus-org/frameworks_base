@@ -66,10 +66,6 @@ public class FODCircleView extends ImageView implements OnTouchListener {
 
     private final WindowManager mWM;
 
-    private final int mCircleX = 584;
-    private final int mCircleY = 2592;
-    private final int mCircleSize = 272;
-
     private boolean mIsDreaming;
     private boolean mIsPulsing;
     private boolean mIsScreenOn;
@@ -174,11 +170,20 @@ public class FODCircleView extends ImageView implements OnTouchListener {
 
     FODCircleView(Context context) {
         super(context);
-
-        mX = mCircleX;
-        mY = mCircleY;
-        mW = mCircleSize;
-        mH = mCircleSize;
+        
+        String[] location = android.os.SystemProperties.get("persist.vendor.sys.fp.fod.location.X_Y", "").split(",");
+        String[] size = android.os.SystemProperties.get("persist.vendor.sys.fp.fod.size.width_height", "").split(",");
+        if (size.length == 2 && location.length == 2) {
+            mX = Integer.parseInt(location[0]);
+            mY = Integer.parseInt(location[1]);
+            mW = Integer.parseInt(size[0]);
+            mH = Integer.parseInt(size[1]);
+        } else {
+            mX = -1;
+            mY = -1;
+            mW = -1;
+            mH = -1;
+        }
 
         mPaintFingerprint.setAntiAlias(true);
         mPaintFingerprint.setColor(Color.GREEN);
@@ -255,7 +260,6 @@ public class FODCircleView extends ImageView implements OnTouchListener {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             setImageResource(R.drawable.fod_icon_empty);
             mParams.dimAmount = TOUCHED_DIM;
-            //mParams.screenBrightness = 1.0f;
             mWM.updateViewLayout(this, mParams);
         }
         return true;
