@@ -53,7 +53,6 @@ public class FacolaView extends ImageView implements OnTouchListener {
     private boolean visible = false;
 
     private final WindowManager mWM;
-
     FacolaView(Context context) {
         super(context);
 
