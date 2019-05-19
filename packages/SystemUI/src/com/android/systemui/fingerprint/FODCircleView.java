@@ -64,9 +64,9 @@ public class FODCircleView extends ImageView implements OnTouchListener {
 
     private final WindowManager mWM;
 
-    private final int mCircleX = 444;
-    private final int mCircleY = 1966;
-    private final int mCircleSize = 190;
+    private final int mCircleX = 584;
+    private final int mCircleY = 2592;
+    private final int mCircleSize = 272;
 
     private boolean mIsDreaming;
     private boolean mIsPulsing;
@@ -85,7 +85,7 @@ public class FODCircleView extends ImageView implements OnTouchListener {
             mIsDreaming = dreaming;
             mInsideCircle = false;
             mChange = true;
-            setCustomIcon();
+            setImageResource(R.drawable.fod_icon_default);
         }
 
         @Override
@@ -94,7 +94,7 @@ public class FODCircleView extends ImageView implements OnTouchListener {
             mIsPulsing = pulsing;
             mInsideCircle = false;
             mChange = true;
-            setCustomIcon();
+            setImageResource(R.drawable.fod_icon_default);
         }
 
         @Override
