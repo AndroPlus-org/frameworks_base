@@ -55,4 +55,7 @@
 
     <!-- Whether to use OnePlus specific FOD -->
     <bool name="config_usesOnePlusFOD">false</bool>
+
+    <!-- Whether to use OnePlus specific FOD -->
+    <bool name="config_usesOnePlusFOD">false</bool>
 </resources>

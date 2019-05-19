@@ -162,4 +162,8 @@
   <!-- FoD -->
   <java-symbol type="bool" name="config_needCustomFODView" />
   <java-symbol type="bool" name="config_usesOnePlusFOD" />
+  <java-symbol type="integer" name="oneplus_fod_location_x" />
+  <java-symbol type="integer" name="oneplus_fod_location_y" />
+  <java-symbol type="integer" name="oneplus_fod_width" />
+  <java-symbol type="integer" name="oneplus_fod_height" />
 </resources>
