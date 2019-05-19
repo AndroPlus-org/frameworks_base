@@ -17,6 +17,8 @@
 package com.android.systemui.fingerprint;
 
 import android.app.KeyguardManager;
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -64,10 +66,6 @@ public class FODCircleView extends ImageView implements OnTouchListener {
 
     private final WindowManager mWM;
 
-    private final int mCircleX = 584;
-    private final int mCircleY = 2592;
-    private final int mCircleSize = 272;
-
     private boolean mIsDreaming;
     private boolean mIsPulsing;
     private boolean mIsScreenOn;
@@ -85,7 +83,7 @@ public class FODCircleView extends ImageView implements OnTouchListener {
             mIsDreaming = dreaming;
             mInsideCircle = false;
             mChange = true;
-            setImageResource(R.drawable.fod_icon_default);
+            setImageResource(R.drawable.fod_icon_empty);
         }
 
         @Override
@@ -94,7 +92,7 @@ public class FODCircleView extends ImageView implements OnTouchListener {
             mIsPulsing = pulsing;
             mInsideCircle = false;
             mChange = true;
-            setImageResource(R.drawable.fod_icon_default);
+            setImageResource(R.drawable.fod_icon_empty);
         }
 
         @Override
@@ -172,11 +170,20 @@ public class FODCircleView extends ImageView implements OnTouchListener {
 
     FODCircleView(Context context) {
         super(context);
-
-        mX = mCircleX;
-        mY = mCircleY;
-        mW = mCircleSize;
-        mH = mCircleSize;
+        
+        String[] location = android.os.SystemProperties.get("persist.vendor.sys.fp.fod.location.X_Y", "").split(",");
+        String[] size = android.os.SystemProperties.get("persist.vendor.sys.fp.fod.size.width_height", "").split(",");
+        if (size.length == 2 && location.length == 2) {
+            mX = Integer.parseInt(location[0]);
+            mY = Integer.parseInt(location[1]);
+            mW = Integer.parseInt(size[0]);
+            mH = Integer.parseInt(size[1]);
+        } else {
+            mX = -1;
+            mY = -1;
+            mW = -1;
+            mH = -1;
+        }
 
         mPaintFingerprint.setAntiAlias(true);
         mPaintFingerprint.setColor(Color.GREEN);
@@ -253,7 +260,6 @@ public class FODCircleView extends ImageView implements OnTouchListener {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             setImageResource(R.drawable.fod_icon_empty);
             mParams.dimAmount = TOUCHED_DIM;
-            //mParams.screenBrightness = 1.0f;
             mWM.updateViewLayout(this, mParams);
         }
         return true;
@@ -291,7 +297,7 @@ public class FODCircleView extends ImageView implements OnTouchListener {
         mIsEnrolling = isEnrolling;
         if (mIsEnrolling) {
             try {
-               mDisplayDaemon.setMode(DISPLAY_SET_DIM, 1);
+            mDisplayDaemon.setMode(DISPLAY_SET_DIM, 1);
             } catch (RemoteException e) {}
         }
         mParams.gravity = Gravity.TOP | Gravity.LEFT;
@@ -309,7 +315,7 @@ public class FODCircleView extends ImageView implements OnTouchListener {
         } catch (RemoteException e) {}
         if (mIsEnrolling) {
             try {
-               mDisplayDaemon.setMode(DISPLAY_SET_DIM, 0);
+            mDisplayDaemon.setMode(DISPLAY_SET_DIM, 0);
             } catch (RemoteException e) {}
         }
         mInsideCircle = false;

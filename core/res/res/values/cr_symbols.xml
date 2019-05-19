@@ -158,4 +158,5 @@
   <!-- FoD -->
   <java-symbol type="bool" name="config_needCustomFODView" />
   <java-symbol type="bool" name="config_usesOnePlusFOD" />
+  <java-symbol type="bool" name="config_usesXiaomiFOD" />
 </resources>
