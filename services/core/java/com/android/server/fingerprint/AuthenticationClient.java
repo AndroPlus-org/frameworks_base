@@ -60,6 +60,9 @@ public abstract class AuthenticationClient extends ClientMonitor {
     protected boolean mDialogDismissed;
 
     private boolean mDisplayFODView;
+    private boolean mUsesOnePlusFOD;
+    private boolean mUsesXiaomiFOD;
+    private FacolaView mFacola;
     private IVendorFingerprintExtensions mExtDaemon = null;
     private final String mKeyguardPackage;
     private static final int DISABLE_FP_LONGPRESS = 4;
@@ -108,6 +111,9 @@ public abstract class AuthenticationClient extends ClientMonitor {
         mFingerprintManager = (FingerprintManager) getContext()
                 .getSystemService(Context.FINGERPRINT_SERVICE);
         mDisplayFODView = context.getResources().getBoolean(com.android.internal.R.bool.config_needCustomFODView);
+        mUsesOnePlusFOD = context.getResources().getBoolean(com.android.internal.R.bool.config_usesOnePlusFOD);
+        mUsesXiaomiFOD = context.getResources().getBoolean(com.android.internal.R.bool.config_usesXiaomiFOD);
+        mFacola = new FacolaView(context);
         mKeyguardPackage = ComponentName.unflattenFromString(context.getResources().getString(
                 com.android.internal.R.string.config_keyguardComponent)).getPackageName();
     }
@@ -247,11 +253,12 @@ public abstract class AuthenticationClient extends ClientMonitor {
             resetFailedAttempts();
             onStop();
         }
-        if(result == true && mDisplayFODView) {
+        if(result == true && mDisplayFODView && mUsesOnePlusFOD) {
             try {
                 mStatusBarService.handleInDisplayFingerprintView(false, false);
             } catch (RemoteException e) {}
         }
+        if(result == true && mUsesXiaomiFOD) mFacola.hide();
         return result;
     }
 
@@ -266,7 +273,7 @@ public abstract class AuthenticationClient extends ClientMonitor {
             return ERROR_ESRCH;
         }
 
-        if (mDisplayFODView) {
+        if (mDisplayFODView && mUsesOnePlusFOD) {
             try {
                 mExtDaemon = IVendorFingerprintExtensions.getService();
                 Slog.w(TAG, "getOwnerString : " + isKeyguard(getOwnerString()));
@@ -279,6 +286,8 @@ public abstract class AuthenticationClient extends ClientMonitor {
 
                 mStatusBarService.handleInDisplayFingerprintView(true, false);
             } catch (RemoteException e) {}
+        } else if (mUsesXiaomiFOD) {
+            mFacola.show();
         }
         onStart();
         try {
@@ -292,7 +301,7 @@ public abstract class AuthenticationClient extends ClientMonitor {
             if (DEBUG) Slog.w(TAG, "client " + getOwnerString() + " is authenticating...");
 
             // If authenticating with system dialog, show the dialog
-            if (!mDisplayFODView && mBundle != null) {
+            if (!mDisplayFODView && mUsesOnePlusFOD && mBundle != null) {
                 try {
                     mStatusBarService.showFingerprintDialog(mBundle, mDialogReceiver);
                 } catch (RemoteException e) {
@@ -321,12 +330,13 @@ public abstract class AuthenticationClient extends ClientMonitor {
             return 0;
         }
 
-        if (mDisplayFODView) {
+        if (mDisplayFODView && mUsesOnePlusFOD) {
             try {
                 mStatusBarService.handleInDisplayFingerprintView(false, false);
             } catch (RemoteException e) {}
         }
 
+        if(mUsesXiaomiFOD) mFacola.hide();
         onStop();
         IBiometricsFingerprint daemon = getFingerprintDaemon();
         if (daemon == null) {
@@ -348,7 +358,7 @@ public abstract class AuthenticationClient extends ClientMonitor {
             // dialog, we do not need to hide it since it's already hidden.
             // If the device is in lockout, don't hide the dialog - it will automatically hide
             // after BiometricPrompt.HIDE_DIALOG_DELAY
-            if (!mDisplayFODView && mBundle != null && !mDialogDismissed && !mInLockout) {
+            if (!mDisplayFODView && mUsesOnePlusFOD && mBundle != null && !mDialogDismissed && !mInLockout) {
                 try {
                     mStatusBarService.hideFingerprintDialog();
                 } catch (RemoteException e) {
