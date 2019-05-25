@@ -61,6 +61,7 @@ public abstract class AuthenticationClient extends ClientMonitor {
 
     private boolean mDisplayFODView;
     private boolean mUsesOnePlusFOD;
+    private boolean mUsesXiaomiFOD;
     private FacolaView mFacola;
     private IVendorFingerprintExtensions mExtDaemon = null;
     private final String mKeyguardPackage;
@@ -111,6 +112,8 @@ public abstract class AuthenticationClient extends ClientMonitor {
                 .getSystemService(Context.FINGERPRINT_SERVICE);
         mDisplayFODView = context.getResources().getBoolean(com.android.internal.R.bool.config_needCustomFODView);
         mUsesOnePlusFOD = context.getResources().getBoolean(com.android.internal.R.bool.config_usesOnePlusFOD);
+        mUsesXiaomiFOD = context.getResources().getBoolean(com.android.internal.R.bool.config_usesXiaomiFOD);
+        mFacola = new FacolaView(context);
         mKeyguardPackage = ComponentName.unflattenFromString(context.getResources().getString(
                 com.android.internal.R.string.config_keyguardComponent)).getPackageName();
     }
@@ -255,6 +258,7 @@ public abstract class AuthenticationClient extends ClientMonitor {
                 mStatusBarService.handleInDisplayFingerprintView(false, false);
             } catch (RemoteException e) {}
         }
+        if(result == true && mUsesXiaomiFOD) mFacola.hide();
         return result;
     }
 
@@ -282,6 +286,8 @@ public abstract class AuthenticationClient extends ClientMonitor {
 
                 mStatusBarService.handleInDisplayFingerprintView(true, false);
             } catch (RemoteException e) {}
+        } else if (mUsesXiaomiFOD) {
+            mFacola.show();
         }
         onStart();
         try {
@@ -330,6 +336,7 @@ public abstract class AuthenticationClient extends ClientMonitor {
             } catch (RemoteException e) {}
         }
 
+        if(mUsesXiaomiFOD) mFacola.hide();
         onStop();
         IBiometricsFingerprint daemon = getFingerprintDaemon();
         if (daemon == null) {

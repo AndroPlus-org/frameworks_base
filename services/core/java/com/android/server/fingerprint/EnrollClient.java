@@ -42,6 +42,7 @@ public abstract class EnrollClient extends ClientMonitor {
     private byte[] mCryptoToken;
     private boolean mDisplayFODView;
     private boolean mUsesOnePlusFOD;
+    private boolean mUsesXiaomiFOD;
     private final FacolaView mFacola;
     private IStatusBarService mStatusBarService;
     private IVendorFingerprintExtensions mExtDaemon = null;
@@ -56,7 +57,9 @@ public abstract class EnrollClient extends ClientMonitor {
         mCryptoToken = Arrays.copyOf(cryptoToken, cryptoToken.length);
         mDisplayFODView = context.getResources().getBoolean(com.android.internal.R.bool.config_needCustomFODView);
         mUsesOnePlusFOD = context.getResources().getBoolean(com.android.internal.R.bool.config_usesOnePlusFOD);
+        mUsesXiaomiFOD = context.getResources().getBoolean(com.android.internal.R.bool.config_usesXiaomiFOD);
         mStatusBarService = statusBarService;
+        mFacola = new FacolaView(context);
     }
 
     @Override
@@ -91,6 +94,7 @@ public abstract class EnrollClient extends ClientMonitor {
                     mStatusBarService.handleInDisplayFingerprintView(false, true);
                 } catch (RemoteException e) {}
             }
+            if(remaining == 0 && mUsesXiaomiFOD) mFacola.hide();
             return remaining == 0;
         } catch (RemoteException e) {
             Slog.w(TAG, "Failed to notify EnrollResult:", e);
@@ -114,6 +118,11 @@ public abstract class EnrollClient extends ClientMonitor {
                 mStatusBarService.handleInDisplayFingerprintView(true, true);
                 mExtDaemon.updateStatus(DISABLE_FP_LONGPRESS);
             } catch (RemoteException e) {}
+        }
+
+        if(mUsesXiaomiFOD){
+            Slog.w(TAG, "Starting enroll");
+            mFacola.show();
         }
 
         final int timeout = (int) (ENROLLMENT_TIMEOUT_MS / MS_PER_SEC);
@@ -143,6 +152,8 @@ public abstract class EnrollClient extends ClientMonitor {
                 mStatusBarService.handleInDisplayFingerprintView(false, true);
             } catch (RemoteException e) {}
         }
+
+        if (mUsesXiaomiFOD) mFacola.hide();
 
         IBiometricsFingerprint daemon = getFingerprintDaemon();
         if (daemon == null) {
