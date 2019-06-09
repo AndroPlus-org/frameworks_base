@@ -106,14 +106,6 @@
     <string name="quick_settings_onthego_label">Режим \"На ходу\"</string>
     <!--Google sound search tile -->
     <string name="quick_settings_sound_search">Поиск музыки</string>
-    <!-- Advance location quick setting tile -->
-    <string name="quick_settings_secondary_location_off"></string>
-    <string name="quick_settings_location_secondary_battery_saving">Экономия заряда батареи</string>
-    <string name="accessibility_quick_settings_location_battery_saving">Определение местоположения: по координатам сети.</string>
-    <string name="quick_settings_location_secondary_gps_only">Только по спутникам Gps</string>
-    <string name="accessibility_quick_settings_location_gps_only">Определение местоположения: только GPS.</string>
-    <string name="quick_settings_location_secondary_high_accuracy">Высокая точность</string>
-    <string name="accessibility_quick_settings_location_high_accuracy">Определение местоположения: режим высокой точности.</string>
     <!-- Pie controls -->
     <string name="pie_date_format">EEEE, dd MMMM yyyy</string>
     <string name="pie_hour_format_12">hh:mm</string>
@@ -136,10 +128,10 @@
     <string name="global_action_restart_systemui">Интерфейс системы</string>
     <!-- Ambient Display Pixel-Like string -->
     <string name="ambientmusic_songinfo">%s от %s</string>
-    <string name="custom_text_clock_top_text_default">It\'s</string>
-    <string name="text_clock_zero_h_min">O\'</string>
-    <string name="text_clock_high">High</string>
-    <string name="text_clock_noon">Noon</string>
+    <string name="custom_text_clock_top_text_default">Сейчас</string>
+    <string name="text_clock_zero_h_min">О\'</string>
+    <string name="text_clock_high">Выше</string>
+    <string name="text_clock_noon">Полдень</string>
     <!-- TensString -->
     <string name="text_clock_tens_string_twenty">Двадцать</string>
     <string name="text_clock_tens_string_thirty">Тридцать</string>
@@ -165,33 +157,35 @@
     <string name="text_clock_units_string_fifteen">Пятнадцать</string>
     <string name="text_clock_units_string_sixteen">Шестнадцать</string>
     <string name="text_clock_units_string_seventeen">Семнадцать</string>
-    <string name="text_clock_units_string_eighteen">Eighteen</string>
-    <string name="text_clock_units_string_nineteen">Nineteen</string>
+    <string name="text_clock_units_string_eighteen">Восемнадцать</string>
+    <string name="text_clock_units_string_nineteen">Девятнадцать</string>
     <!-- TensStringH -->
-    <string name="text_clock_tens_string_h_twenty">Twenty</string>
-    <string name="text_clock_tens_string_h_thirty">Thirty</string>
-    <string name="text_clock_tens_string_h_forty">Forty</string>
-    <string name="text_clock_tens_string_h_fifty">Fifty</string>
-    <string name="text_clock_tens_string_h_sixty">Sixty</string>
+    <string name="text_clock_tens_string_h_twenty">Двадцать</string>
+    <string name="text_clock_tens_string_h_thirty">Тридцать</string>
+    <string name="text_clock_tens_string_h_forty">Сорок</string>
+    <string name="text_clock_tens_string_h_fifty">Пятьдесят</string>
+    <string name="text_clock_tens_string_h_sixty">Шестьдесят</string>
     <!-- UnitsStringH -->
-    <string name="text_clock_units_string_h_twelve_h">Twelve</string>
-    <string name="text_clock_units_string_h_one">One</string>
-    <string name="text_clock_units_string_h_two">Two</string>
-    <string name="text_clock_units_string_h_three">Three</string>
-    <string name="text_clock_units_string_h_four">Four</string>
-    <string name="text_clock_units_string_h_five">Five</string>
-    <string name="text_clock_units_string_h_six">Six</string>
-    <string name="text_clock_units_string_h_seven">Seven</string>
-    <string name="text_clock_units_string_h_eight">Eight</string>
-    <string name="text_clock_units_string_h_nine">Nine</string>
-    <string name="text_clock_units_string_h_ten">Ten</string>
-    <string name="text_clock_units_string_h_eleven">Eleven</string>
-    <string name="text_clock_units_string_h_twelve">Twelve</string>
-    <string name="text_clock_units_string_h_thirteen">Thirteen</string>
-    <string name="text_clock_units_string_h_fourteen">Fourteen</string>
-    <string name="text_clock_units_string_h_fifteen">Fifteen</string>
-    <string name="text_clock_units_string_h_sixteen">Sixteen</string>
-    <string name="text_clock_units_string_h_seventeen">Seventeen</string>
-    <string name="text_clock_units_string_h_eighteen">Eighteen</string>
-    <string name="text_clock_units_string_h_nineteen">Nineteen</string>
+    <string name="text_clock_units_string_h_twelve_h">Двенадцать</string>
+    <string name="text_clock_units_string_h_one">Один</string>
+    <string name="text_clock_units_string_h_two">Два</string>
+    <string name="text_clock_units_string_h_three">Три</string>
+    <string name="text_clock_units_string_h_four">Четыре</string>
+    <string name="text_clock_units_string_h_five">Пять</string>
+    <string name="text_clock_units_string_h_six">Шесть</string>
+    <string name="text_clock_units_string_h_seven">Семь</string>
+    <string name="text_clock_units_string_h_eight">Восемь</string>
+    <string name="text_clock_units_string_h_nine">Девять</string>
+    <string name="text_clock_units_string_h_ten">Десять</string>
+    <string name="text_clock_units_string_h_eleven">Одиннадцать</string>
+    <string name="text_clock_units_string_h_twelve">Двенадцать</string>
+    <string name="text_clock_units_string_h_thirteen">Тринадцать</string>
+    <string name="text_clock_units_string_h_fourteen">Четырнадцать</string>
+    <string name="text_clock_units_string_h_fifteen">Пятнадцать</string>
+    <string name="text_clock_units_string_h_sixteen">Шестнадцать</string>
+    <string name="text_clock_units_string_h_seventeen">Семнадцать</string>
+    <string name="text_clock_units_string_h_eighteen">Восемнадцать</string>
+    <string name="text_clock_units_string_h_nineteen">Девятнадцать</string>
+    <!-- OneHand mode QS tile -->
+    <string name="qs_onehand_label">Управление одной рукой</string>
 </resources>
