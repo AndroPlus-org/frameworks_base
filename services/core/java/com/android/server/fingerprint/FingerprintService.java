@@ -411,7 +411,7 @@ public class FingerprintService extends SystemService implements IHwBinder.Death
         }
 
         try {
-            if (mExtDaemon != null && !mExtDaemon.shouldHandleError(error)) {
+            if (mExtDaemon != null && mExtDaemon.handleError(error, vendorCode)) {
                 return;
             }
         } catch (NoSuchElementException | RemoteException e) {
@@ -493,6 +493,22 @@ public class FingerprintService extends SystemService implements IHwBinder.Death
     }
 
     protected void handleAcquired(long deviceId, int acquiredInfo, int vendorCode) {
+        if (mExtDaemon == null) {
+            try {
+                mExtDaemon = IFingerprintInscreen.getService();
+            } catch (NoSuchElementException | RemoteException e) {
+                // do nothing
+            }
+        }
+
+        try {
+            if (mExtDaemon != null && mExtDaemon.handleAcquired(acquiredInfo, vendorCode)) {
+                return;
+            }
+        } catch (NoSuchElementException | RemoteException e) {
+            // do nothing
+        }
+
         ClientMonitor client = mCurrentClient;
         if (client != null && client.onAcquired(acquiredInfo, vendorCode)) {
             removeClient(client);
